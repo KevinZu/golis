@@ -118,13 +118,17 @@ func NewClient() *client {
 }
 
 // dial to server
-func (c *client) Dial(netPro, laddr string) {
-	c.runnable = true
+func (c *Client) Dial(netPro, laddr string) error {
 	conn, err := net.Dial(netPro, laddr)
 	if err != nil {
 		fmt.Println(err)
+		return err
 	}
-	c.newIoSession(conn)
-	time.Sleep(20 * time.Millisecond)
-	c.wg.Wait()
+	go func() {
+		c.runnable = true
+		c.newIoSession(conn)
+		time.Sleep(20 * time.Millisecond)
+		c.wg.Wait()
+	}()
+	return nil
 }
