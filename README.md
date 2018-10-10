@@ -5,13 +5,13 @@ golis 是一个简单的构建网络消息传输的脚手架，类型java中的m
 
 golis 通过IoFilterChain 处理定义好的IoFilter,类似mina。
 
-##Quick Start
-######Download and install
+## Quick Start
+###### Download and install
 
     go get github.com/pojoin/golis
 
-####example echoServer
-######Create file `echoServer.go`
+#### example echoServer
+###### Create file `echoServer.go`
 ```go
 package main
 
@@ -69,11 +69,11 @@ func (*filter) ErrorCaught(session *golis.Iosession, err error) bool {
 	return true
 }
 ```
-######Build and run
+###### Build and run
 ```bash
     go run echoServer.go
 ```
-######test
+###### test
 ```bash
     telnet 127.0.0.1 9090
 ````
