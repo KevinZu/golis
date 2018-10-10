@@ -107,18 +107,18 @@ func (s *server) ListenInfo() string {
 		s.protocal, s.ioaddr)
 }
 
-type client struct {
+type Client struct {
 	ioserv
 }
 
-func NewClient() *client {
-	c := &client{}
+func NewClient() *Client {
+	c := &Client{}
 	c.filterChain = &IoFilterChain{}
 	return c
 }
 
 // dial to server
-func (c *client) Dial(netPro, laddr string) error {
+func (c *Client) Dial(netPro, laddr string) error {
 	conn, err := net.Dial(netPro, laddr)
 	if err != nil {
 		fmt.Println(err)
