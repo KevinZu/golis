@@ -118,7 +118,7 @@ func NewClient() *client {
 }
 
 // dial to server
-func (c *Client) Dial(netPro, laddr string) error {
+func (c *client) Dial(netPro, laddr string) error {
 	conn, err := net.Dial(netPro, laddr)
 	if err != nil {
 		fmt.Println(err)
