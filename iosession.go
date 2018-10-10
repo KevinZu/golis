@@ -49,7 +49,7 @@ func (s *Iosession) dealDataCh() {
 	for s.serv.runnable && !s.closed {
 		select {
 		case msg = <-s.dataCh:
-			fmt.Println("收到消息")
+			//fmt.Println("收到消息")
 			s.serv.filterChain.msgReceived(s, msg)
 		}
 	}
@@ -60,6 +60,9 @@ func (session *Iosession) readData() {
 	ioBuffer := NewBuffer()
 	buffer := make([]byte, 512)
 	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+		}
 		if !session.closed {
 			session.Close()
 		}

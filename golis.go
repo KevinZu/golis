@@ -31,6 +31,7 @@ func (serv *ioserv) newIoSession(conn net.Conn) *Iosession {
 	session.serv = serv
 	session.closed = false
 	session.extraData = make(map[string]interface{})
+	//session.extraData["acceptAddr"]
 	session.dataCh = make(chan interface{}, 16)
 	session.id = atomic.AddUint64(&serv.generator_id, 1)
 	go session.dealDataCh()
@@ -109,6 +110,7 @@ func (s *server) ListenInfo() string {
 
 type Client struct {
 	ioserv
+	Session *Iosession
 }
 
 func NewClient() *Client {
@@ -126,9 +128,25 @@ func (c *Client) Dial(netPro, laddr string) error {
 	}
 	go func() {
 		c.runnable = true
-		c.newIoSession(conn)
+		c.Session = c.newIoSession(conn)
+		fmt.Printf("+-+    session: %p   client:%p\n", c.Session, c)
 		time.Sleep(20 * time.Millisecond)
 		c.wg.Wait()
+		//fmt.Printf("+------------+    session: %p   client:%p\n", c.Session, c)
 	}()
+	return nil
+}
+
+func (c *Client) ReDial(netPro, laddr string) error {
+	conn, err := net.Dial(netPro, laddr)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	c.Session = c.newIoSession(conn)
+	fmt.Printf("+---------+    session: %p   client:%p\n", c.Session, c)
+	c.runnable = true
+
 	return nil
 }
